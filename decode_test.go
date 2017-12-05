@@ -5,19 +5,19 @@ import (
 	"encoding/binary"
 	"testing"
 
+	"cloud.google.com/go/bigtable"
 	"github.com/osamingo/boolconv"
-	"google.golang.org/cloud/bigtable"
 )
 
 func TestReadColumnQualifiers(t *testing.T) {
 
 	ris := []bigtable.ReadItem{
-		bigtable.ReadItem{
+		{
 			Row:    "rowkey",
 			Column: "fc:test",
 			Value:  []byte("test"),
 		},
-		bigtable.ReadItem{
+		{
 			Row:    "rowkey",
 			Column: "fc:test2",
 			Value:  []byte("test"),
@@ -55,7 +55,7 @@ func TestReadItemsErrorCase(t *testing.T) {
 	}
 
 	ris := []bigtable.ReadItem{
-		bigtable.ReadItem{
+		{
 			Row:    "rowkey",
 			Column: "fc:test",
 			Value:  []byte("test"),
@@ -109,17 +109,17 @@ func TestReadItems(t *testing.T) {
 	buf := &bytes.Buffer{}
 
 	ris := []bigtable.ReadItem{
-		bigtable.ReadItem{
+		{
 			Row:    key,
 			Column: "fc:tbytes",
 			Value:  []byte(bstr),
 		},
-		bigtable.ReadItem{
+		{
 			Row:    key,
 			Column: "fc:tstr",
 			Value:  []byte(str),
 		},
-		bigtable.ReadItem{
+		{
 			Row:    key,
 			Column: "fc:tbool",
 			Value:  boolconv.NewBool(bl).Bytes(),

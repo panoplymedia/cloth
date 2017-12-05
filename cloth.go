@@ -3,6 +3,9 @@ package cloth
 import (
 	"strings"
 	"unicode"
+
+	"cloud.google.com/go/bigtable"
+	"golang.org/x/net/context"
 )
 
 // TagInfo is a field tag information.
@@ -49,4 +52,14 @@ func GetBigtableTagInfo(tag string) (ti TagInfo) {
 	}
 
 	return
+}
+
+func NewClient(project string, instance string) *bigtable.Client {
+	client, err := bigtable.NewClient(context.Background(), project, instance)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return client
 }
