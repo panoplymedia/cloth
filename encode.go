@@ -7,9 +7,9 @@ import (
 	"reflect"
 	"time"
 
+	"cloud.google.com/go/bigtable"
 	"github.com/fatih/structs"
 	"github.com/osamingo/boolconv"
-	"google.golang.org/cloud/bigtable"
 )
 
 // GenerateColumnsMutation generates Mutation from Struct.
@@ -125,6 +125,11 @@ func getBytes(f *structs.Field) ([]byte, error) {
 
 	switch f.Kind() {
 
+	case reflect.Struct:
+		if reflect.TypeOf(f.Value()).String() == "time.Time" {
+			return []byte(f.Value().(time.Time).String()), nil
+		}
+
 	case reflect.Slice:
 		if reflect.ValueOf(f.Value()).Type().Elem().Kind() == reflect.Uint8 {
 			// []byte
@@ -148,7 +153,6 @@ func getBytes(f *structs.Field) ([]byte, error) {
 
 	case reflect.Int64, reflect.Uint64, reflect.Int, reflect.Uint, reflect.Float32, reflect.Float64:
 		b = bytes.NewBuffer(make([]byte, 0, binary.MaxVarintLen64))
-
 	}
 
 	if b != nil {
@@ -165,5 +169,5 @@ func getBytes(f *structs.Field) ([]byte, error) {
 		return b.Bytes(), err
 	}
 
-	return nil, fmt.Errorf("cloth: unsupported type. %v", f.Kind())
+	return nil, fmt.Errorf("cloth: unsupported type. %v %v", f.Kind(), f)
 }

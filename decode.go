@@ -7,9 +7,9 @@ import (
 	"reflect"
 	"strings"
 
+	"cloud.google.com/go/bigtable"
 	"github.com/fatih/structs"
 	"github.com/osamingo/boolconv"
-	"google.golang.org/cloud/bigtable"
 )
 
 // ReadColumnQualifier returns column qualifiers.
@@ -29,6 +29,8 @@ func ReadItems(ris []bigtable.ReadItem, s interface{}) (err error) {
 	if len(ris) == 0 || s == nil {
 		return
 	}
+
+	fmt.Println(reflect.TypeOf(s))
 
 	fs := structs.New(s).Fields()
 	if len(fs) == 0 {
